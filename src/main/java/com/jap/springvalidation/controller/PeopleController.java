@@ -1,6 +1,8 @@
 package com.jap.springvalidation.controller;
 
 import com.jap.springvalidation.dto.request.PeopleRequest;
+import com.jap.springvalidation.dto.response.BadRequestResponse;
+import com.jap.springvalidation.exception.ValidateException;
 import com.jap.springvalidation.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,10 @@ public class PeopleController {
 
     @PostMapping("/people")
     public ResponseEntity<?> postPeople(@RequestBody PeopleRequest peopleRequest) {
-        return ResponseEntity.ok(peopleService.save(peopleRequest));
+        try {
+            return ResponseEntity.ok(peopleService.save(peopleRequest));
+        } catch (ValidateException ex) {
+            return ResponseEntity.badRequest().body(new BadRequestResponse(ex.getMessage()));
+        }
     }
 }
