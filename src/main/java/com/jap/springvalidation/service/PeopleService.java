@@ -1,6 +1,5 @@
 package com.jap.springvalidation.service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jap.springvalidation.db.entity.People;
 import com.jap.springvalidation.db.repository.PeopleRepository;
@@ -15,12 +14,13 @@ import org.springframework.stereotype.Service;
 public class PeopleService {
 
     private final PeopleRepository peopleRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final PeopleValidation peopleValidation;
 
     @Autowired
-    public PeopleService(PeopleRepository peopleRepository, PeopleValidation peopleValidation) {
+    public PeopleService(PeopleRepository peopleRepository, ObjectMapper objectMapper, PeopleValidation peopleValidation) {
         this.peopleRepository = peopleRepository;
+        this.objectMapper = objectMapper;
         this.peopleValidation = peopleValidation;
     }
 
@@ -28,11 +28,8 @@ public class PeopleService {
         log.debug("PeopleService on Save");
         peopleValidation.fullNameValidate(peopleRequest);
         peopleValidation.emailValidate(peopleRequest);
-        log.debug("convert peopleRequest to people");
         People people = objectMapper.convertValue(peopleRequest, People.class);
         People save = peopleRepository.save(people);
-        log.debug("convert people to people request");
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper.convertValue(save, PeopleRequest.class);
     }
 }
