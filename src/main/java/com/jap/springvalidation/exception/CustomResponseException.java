@@ -1,6 +1,6 @@
 package com.jap.springvalidation.exception;
 
-import com.jap.springvalidation.dto.response.Error;
+import com.jap.springvalidation.dto.response.FieldErrorValidation;
 import com.jap.springvalidation.dto.response.ErrorResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
@@ -14,14 +14,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @Log4j2
 @ControllerAdvice
-public class PeopleControllerException extends ResponseEntityExceptionHandler {
+public class CustomResponseException extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        log.info("masuk");
+        log.info("error: handleMethodArgumentNotValid");
         ErrorResponse errorResponse = new ErrorResponse();
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            errorResponse.getErrors().add(new Error(fieldError.getField(), fieldError.getDefaultMessage()));
+            errorResponse.getErrors().add(new FieldErrorValidation(fieldError.getField(), fieldError.getDefaultMessage()));
         }
         return ResponseEntity.badRequest().body(errorResponse);
     }

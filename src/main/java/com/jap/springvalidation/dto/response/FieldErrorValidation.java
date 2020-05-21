@@ -3,11 +3,13 @@ package com.jap.springvalidation.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class Error {
+public class FieldErrorValidation {
     private String field;
-    private Object error;
+    private Object message;
 }
