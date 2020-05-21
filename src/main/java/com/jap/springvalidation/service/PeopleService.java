@@ -14,12 +14,13 @@ import org.springframework.stereotype.Service;
 public class PeopleService {
 
     private final PeopleRepository peopleRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final PeopleValidation peopleValidation;
 
     @Autowired
-    public PeopleService(PeopleRepository peopleRepository, PeopleValidation peopleValidation) {
+    public PeopleService(PeopleRepository peopleRepository, ObjectMapper objectMapper, PeopleValidation peopleValidation) {
         this.peopleRepository = peopleRepository;
+        this.objectMapper = objectMapper;
         this.peopleValidation = peopleValidation;
     }
 
