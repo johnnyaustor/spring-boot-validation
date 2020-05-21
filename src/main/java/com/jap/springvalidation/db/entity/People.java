@@ -3,11 +3,12 @@ package com.jap.springvalidation.db.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Entity
-public class People {
+public class People implements Serializable {
     @Id
     @GeneratedValue
     private Long id;

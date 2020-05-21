@@ -24,7 +24,7 @@ class PeopleControllerTest {
 
     @Test
     void testPostPeople() throws Exception {
-        PeopleRequest request = PeopleRequest.builder().build();
+        PeopleRequest request = new PeopleRequest();
         mockMvc.perform(
                 post("/people")
                 .contentType(MediaType.APPLICATION_JSON)

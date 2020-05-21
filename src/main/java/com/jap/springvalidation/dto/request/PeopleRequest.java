@@ -1,13 +1,11 @@
 package com.jap.springvalidation.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-@Builder
-@AllArgsConstructor
-public class PeopleRequest {
+public class PeopleRequest implements Serializable {
     private Long id;
     private String fullName;
     private String email;
