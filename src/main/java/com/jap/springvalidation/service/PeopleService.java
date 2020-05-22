@@ -26,8 +26,8 @@ public class PeopleService {
 
     public PeopleRequest save(PeopleRequest peopleRequest) {
         log.debug("PeopleService on Save");
-        peopleValidation.fullNameValidate(peopleRequest);
-        peopleValidation.emailValidate(peopleRequest);
+        peopleValidation.fullNameValidate(peopleRequest.getFullName());
+        peopleValidation.emailValidate(peopleRequest.getEmail());
         People people = objectMapper.convertValue(peopleRequest, People.class);
         People save = peopleRepository.save(people);
         return objectMapper.convertValue(save, PeopleRequest.class);
