@@ -2,10 +2,12 @@ package com.jap.springvalidation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jap.springvalidation.dto.request.PeopleRequest;
+import com.jap.springvalidation.utils.PeopleStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -13,9 +15,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static com.jap.springvalidation.ResponseBodyMatchers.responseBody;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = PeopleController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 class PeopleControllerITest {
 
@@ -39,7 +42,7 @@ class PeopleControllerITest {
     @Test
     void testPostPeople_withInvalidEmail() throws Exception {
         PeopleRequest request = PeopleRequest.builder()
-                .fullName("Agus")
+                .fullName("A")
                 .email("agus").build();
 
         MockHttpServletRequestBuilder requestBuilder = post("/people")
@@ -50,6 +53,27 @@ class PeopleControllerITest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(responseBody().containsError("email", "must be a well-formed email address"));
+    }
+
+    @Test
+    void testPostPeople_withConflictEmail() throws Exception {
+        PeopleRequest request = PeopleRequest.builder()
+                .fullName("johnny")
+                .email("john@email.com")
+                .age(20).build();
+
+        MockHttpServletRequestBuilder requestBuilder = post("/people")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request));
+
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.statusCode").value(PeopleStatus.EMAIL_NOT_AVAILABLE.getStatusCode()));
     }
 
     @Test
