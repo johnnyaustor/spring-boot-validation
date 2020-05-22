@@ -32,7 +32,7 @@ class PeopleControllerITest {
     void testPostPeople_returnBadRequest() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = post("/people")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(PeopleRequest.builder().build()));
+                .content(objectMapper.writeValueAsString(new PeopleRequest()));
 
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -41,9 +41,9 @@ class PeopleControllerITest {
 
     @Test
     void testPostPeople_withInvalidEmail() throws Exception {
-        PeopleRequest request = PeopleRequest.builder()
-                .fullName("A")
-                .email("agus").build();
+        PeopleRequest request = new PeopleRequest();
+        request.setFullName("a");
+        request.setEmail("a");
 
         MockHttpServletRequestBuilder requestBuilder = post("/people")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,10 +57,10 @@ class PeopleControllerITest {
 
     @Test
     void testPostPeople_withConflictEmail() throws Exception {
-        PeopleRequest request = PeopleRequest.builder()
-                .fullName("johnny")
-                .email("john@email.com")
-                .age(20).build();
+        PeopleRequest request = new PeopleRequest();
+        request.setFullName("johnny");
+        request.setEmail("john@email.com");
+        request.setAge(20);
 
         MockHttpServletRequestBuilder requestBuilder = post("/people")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,9 +78,9 @@ class PeopleControllerITest {
 
     @Test
     void testPostPeople_withAgeNull() throws Exception {
-        PeopleRequest request = PeopleRequest.builder()
-                .fullName("Agus")
-                .email("agus@jap.com").build();
+        PeopleRequest request = new PeopleRequest();
+        request.setFullName("johnny");
+        request.setEmail("john@email.com");
 
         MockHttpServletRequestBuilder requestBuilder = post("/people")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,10 +93,10 @@ class PeopleControllerITest {
 
     @Test
     void testPostPeople_withAgeUnder() throws Exception {
-        PeopleRequest request = PeopleRequest.builder()
-                .fullName("Agus")
-                .email("agus@jap.com")
-                .age(5).build();
+        PeopleRequest request = new PeopleRequest();
+        request.setFullName("johnny");
+        request.setEmail("john@email.com");
+        request.setAge(5);
 
         MockHttpServletRequestBuilder requestBuilder = post("/people")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,10 +110,10 @@ class PeopleControllerITest {
 
     @Test
     void testPostPeople_withAgeGreater() throws Exception {
-        PeopleRequest request = PeopleRequest.builder()
-                .fullName("Agus")
-                .email("agus@jap.com")
-                .age(56).build();
+        PeopleRequest request = new PeopleRequest();
+        request.setFullName("johnny");
+        request.setEmail("john@email.com");
+        request.setAge(56);
 
         MockHttpServletRequestBuilder requestBuilder = post("/people")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -127,10 +127,10 @@ class PeopleControllerITest {
 
     @Test
     void testPostPeople_returnOk() throws Exception {
-        PeopleRequest request = PeopleRequest.builder()
-                .fullName("Agus")
-                .email("agus@jap.com")
-                .age(20).build();
+        PeopleRequest request = new PeopleRequest();
+        request.setFullName("johnny");
+        request.setEmail("john@email.com");
+        request.setAge(20);
 
         MockHttpServletRequestBuilder requestBuilder = post("/people")
                 .contentType(MediaType.APPLICATION_JSON)
